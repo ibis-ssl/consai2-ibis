@@ -1,0 +1,55 @@
+*consai2
+  *ジョイスティック
+    roslaunch consai2_examples joystic_example.launch sim:=true
+  *game.launch
+    roslaunch consai2_examples game.launch sim:=true
+  *realsender
+    rosrun  consai2_sender real_sender_ibis.py
+  * 青チームで左守り
+    roslaunch consai2_examples game.launch sim:=true color:=blue side:=left
+  * 黄チームで右守り
+    roslaunch consai2_examples game.launch sim:=true color:=yellow side:=right
+  * STP
+    roslaunch consai2_examples stp_test_without_stp.launch
+    rosrun consai2_stp consai2_stp_node
+
+
+*ssl-vision
+cd ssl-vision
+sh setup.sh
+./bin/vision
+ssl-vision/bin/graphicalClient
+
+*ssl-refbox
+cd refbox
+./ssl-refbox
+
+
+*ssl-game-controller
+cd ssl-game-controller
+./ssl-game-controller_v1.1.7_linux_amd64 
+
+*ssl-autorefs
+cd ssl-autorefs
+./run_tigers.sh
+
+*CON-SAI
+  *AI起動
+     roslaunch ai_core ai_core.launch
+     rosrun grsim_wrapper detection.py mticast_addr:=224.5.23.2 multicast_port:=10006
+     rosrun grsim_wrapper command_sender.py server_address:=127.0.0.1 server_port:=20011
+  
+  *realsender    
+     rosrun  real_sender real_sender_node
+  
+  *ジョイスティック動作テスト
+     roslaunch ssl_joystick_operation ssl_joystick_operation.launch number:=ロボット番号　
+
+
+*メモリ開放
+sudo sysctl -w vm.drop_caches=3
+
+*git
+git
+git add *
+git commit -m "メッセージ"

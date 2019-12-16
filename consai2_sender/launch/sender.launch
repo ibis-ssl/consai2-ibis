@@ -1,0 +1,19 @@
+<launch>
+  <!-- 実機 / grSim の切り替え -->
+  <arg name="sim" default="false" />
+
+  <!-- パラメータの読み込み -->
+  <arg name="load_description" default="true" />
+  <group if="$(arg load_description)">
+    <include file="$(find consai2_description)/launch/description.launch"/>
+  </group>
+
+  <group if="$(arg sim)">
+    <node name="sim_sender" pkg="consai2_sender" type="sim_sender.py" output="screen" required="true"/>
+  </group>
+
+  <group unless="$(arg sim)">
+    <node name="real_sender_ibis" pkg="consai2_sender" type="real_sender_ibis.py" output="screen" required="true"/>
+  </group>
+
+</launch>
